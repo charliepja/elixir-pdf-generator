@@ -144,8 +144,9 @@ defmodule PdfGenerator do
     open_password = options[:open_password]
     edit_password = options[:edit_password]
     delete_temp   = options[:delete_temporary]
+    file_extension = options[:extension]
 
-    with {html_file, pdf_file}       <- make_file_paths(options),
+    with {html_file, pdf_file}       <- make_file_paths(options, file_extension),
          :ok                         <- maybe_write_html(content, html_file),
          {executable, arguments}     <- make_command(generator, options, content, {html_file, pdf_file}),
          {:cmd, {stderr, exit_code}} <- {:cmd, System.cmd(executable, arguments, stderr_to_stdout: true)},       # unfortunately wkhtmltopdf returns 0 on errors as well :-/
@@ -165,10 +166,10 @@ defmodule PdfGenerator do
   def maybe_write_html({:html, html}, html_file_path),                      do: File.write(html_file_path, html)
   def maybe_write_html(html,          html_file_path) when is_binary(html), do: maybe_write_html({:html, html}, html_file_path)
 
-  @spec make_file_paths(keyword()) :: {html_path, pdf_path}
-  def make_file_paths(options) do
+  @spec make_file_paths(keyword(), String.t() \\ ".pdf") :: {html_path, pdf_path}
+  def make_file_paths(options, extension \\ ".pdf") do
     filebase = options[:filename] |> generate_filebase()
-    {filebase <> ".html", filebase <> ".pdf"}
+    {filebase <> ".html", filebase <> extension}
   end
 
   def make_dimensions(options) when is_list(options) do
