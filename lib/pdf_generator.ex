@@ -166,8 +166,8 @@ defmodule PdfGenerator do
   def maybe_write_html({:html, html}, html_file_path),                      do: File.write(html_file_path, html)
   def maybe_write_html(html,          html_file_path) when is_binary(html), do: maybe_write_html({:html, html}, html_file_path)
 
-  @spec make_file_paths(keyword(), String.t() \\ ".pdf") :: {html_path, pdf_path}
-  def make_file_paths(options, extension \\ ".pdf") do
+  @spec make_file_paths(keyword(), String.t()) :: {html_path, pdf_path}
+  def make_file_paths(options, extension) do
     filebase = options[:filename] |> generate_filebase()
     {filebase <> ".html", filebase <> extension}
   end
