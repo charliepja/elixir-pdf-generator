@@ -202,7 +202,7 @@ defmodule PdfGenerator do
         :code.priv_dir(:pdf_generator) |> to_string()
       end
 
-    js_file  = "#{dir}/node_modules/chrome-headless-render-pdf/dist/cli/chrome-headless-render-pdf.js"
+    js_file  = "#{dir}/node_modules/chrome-headless-render-pdf/cli/chrome-headless-render-pdf.js"
 
     {executable, executable_args} =
       if options[:prefer_system_executable] && is_binary(chrome_executable) do
